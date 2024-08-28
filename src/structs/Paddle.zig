@@ -1,23 +1,23 @@
-const r = @import("raylib.zig");
+const r = @import("../raylib.zig");
 const screen = @import("../global/screen.zig");
 
-const Paddle = struct {
+pub const Paddle = struct {
     position: r.Vector2,
     size: r.Vector2,
     speed: f32,
 
-    const PADDLE_WIDTH = 30;
-    const PADDLE_HEIGHT = 100;
+    pub const PADDLE_WIDTH = 30;
+    pub const PADDLE_HEIGHT = 100;
 
     pub fn init(x: f32, y: f32, width: f32, height: f32, speed: f32) Paddle {
         return Paddle{ .position = r.Vector2{ .x = x, .y = y }, .size = r.Vector2{ .x = width, .y = height }, .speed = speed };
     }
 
-    pub fn update(self: *Paddle) void {
-        if (r.IsKeyDown(r.KEY_UP) and self.position.y > 0) {
+    pub fn update_movement(self: *Paddle, up: i16, down: i16) void {
+        if (r.IsKeyDown(up) and self.position.y > 0) {
             self.position.y -= self.speed;
         }
-        if (r.IsKeyDown(r.KEY_DOWN) and (self.position.y + PADDLE_HEIGHT) < screen.SCREEN_HEIGHT) {
+        if (r.IsKeyDown(down) and (self.position.y + PADDLE_HEIGHT) < screen.SCREEN_HEIGHT) {
             self.position.y += self.speed;
         }
     }

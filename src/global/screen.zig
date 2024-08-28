@@ -1,2 +1,2 @@
-const SCREEN_WIDTH = 960;
-const SCREEN_HEIGHT = 540;
+pub const SCREEN_WIDTH = 960;
+pub const SCREEN_HEIGHT = 540;

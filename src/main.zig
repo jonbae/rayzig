@@ -1,8 +1,8 @@
 const std = @import("std");
 const r = @import("raylib.zig");
-const screen = @import("../global/screen.zig");
-const ball_struct = @import("./structs/Ball.zig");
-const paddle_struct = @import("./structs/Paddle.zig");
+const screen = @import("./global/screen.zig");
+const b = @import("./structs/Ball.zig");
+const p = @import("./structs/Paddle.zig");
 
 pub fn main() !void {
     r.InitWindow(screen.SCREEN_WIDTH, screen.SCREEN_HEIGHT, "RayZig Window :)");
@@ -10,8 +10,9 @@ pub fn main() !void {
 
     r.SetTargetFPS(60);
 
-    var ball = ball_struct.Ball.init(0, 0, 32, 4);
-    var paddle = paddle_struct.Paddle.init(0, 0, paddle_struct.PADDLE_WIDTH, paddle_struct.PADDLE_HEIGHT, 4);
+    var ball = b.Ball.init(50, 50, 32, 4);
+    var p1paddle = p.Paddle.init(0, 0, p.Paddle.PADDLE_WIDTH, p.Paddle.PADDLE_HEIGHT, 4);
+    var p2paddle = p.Paddle.init(screen.SCREEN_WIDTH - p.Paddle.PADDLE_WIDTH, 0, p.Paddle.PADDLE_WIDTH, p.Paddle.PADDLE_HEIGHT, 4);
     while (!r.WindowShouldClose()) {
         r.BeginDrawing();
         defer r.EndDrawing();
@@ -19,10 +20,15 @@ pub fn main() !void {
 
         // UPDATE
         ball.update();
-        paddle.update();
+        p1paddle.update_movement(r.KEY_W, r.KEY_S);
+        p2paddle.update_movement(r.KEY_UP, r.KEY_DOWN);
+        ball.wall_collision_detection();
+        ball.paddle_collision_detection(&p1paddle);
+        ball.paddle_collision_detection(&p2paddle);
 
         // DRAW
         ball.draw();
-        paddle.draw();
+        p1paddle.draw();
+        p2paddle.draw();
     }
 }
